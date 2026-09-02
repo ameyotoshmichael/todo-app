@@ -1,3 +1,4 @@
+@'
 # Todo Application
 
 A full-stack Todo application built with a React (MPA-style) frontend and a Node.js/Express backend, using TypeScript and SQLite for persistence.
@@ -39,3 +40,64 @@ todo-app/
     │   ├── api.ts        # API client
     │   └── App.tsx       # Routing setup
     └── package.json
+Getting Started
+Prerequisites
+Node.js (v18 or later)
+
+npm
+
+Installation
+Clone the repository:
+
+bash
+git clone <your-repo-url>
+cd todo-app
+Install backend dependencies:
+
+bash
+cd backend
+npm install
+Install frontend dependencies:
+
+bash
+cd ../frontend
+npm install
+Running Locally
+Open two separate terminals:
+
+Terminal 1 (Backend):
+
+bash
+cd backend
+npm run dev
+Server runs on http://localhost:5000
+
+Terminal 2 (Frontend):
+
+bash
+cd frontend
+npm run dev
+App runs on http://localhost:5173
+
+API Endpoints
+Method	Endpoint	Description
+GET	/api/todos	Get all todos
+GET	/api/todos/:id	Get a single todo
+POST	/api/todos	Create a new todo
+PUT	/api/todos/:id	Update a todo
+DELETE	/api/todos/:id	Delete a todo
+Running Tests
+bash
+cd backend
+npm test
+Deployment
+The application is configured to serve the built frontend from the backend in production mode.
+
+Build the frontend: cd frontend && npm run build
+
+Build the backend: cd backend && npm run build
+
+Run in production: cd backend && npm start
+
+(Recommended host: Render or Vercel + Render).
+'@ | Set-Content -Path README.md -Encoding UTF8
