@@ -1,4 +1,4 @@
-@'
+
 # Todo App
 
 A full-stack Todo app built with React (MPA-style) and Node.js/Express + SQLite.
@@ -27,4 +27,4 @@ A full-stack Todo app built with React (MPA-style) and Node.js/Express + SQLite.
 - POST `/api/todos`
 - PUT `/api/todos/:id`
 - DELETE `/api/todos/:id`
-'@ | Set-Content -Path README.md -Encoding UTF8
+
