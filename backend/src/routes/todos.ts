@@ -4,9 +4,15 @@ import { Todo } from '../types';
 
 const router = Router();
 
+// Helper to convert SQLite integer (1/0) to boolean (true/false)
+const mapTodo = (todo: any): Todo => ({
+  ...todo,
+  completed: todo.completed === 1
+});
+
 // GET /api/todos - list all
 router.get('/', (req, res) => {
-  const todos = db.prepare('SELECT * FROM todos ORDER BY created_at DESC').all();
+  const todos = db.prepare('SELECT * FROM todos ORDER BY created_at DESC').all().map(mapTodo);
   res.json(todos);
 });
 
@@ -15,7 +21,7 @@ router.get('/:id', (req, res) => {
   const id = Number(req.params.id);
   const todo = db.prepare('SELECT * FROM todos WHERE id = ?').get(id) as Todo | undefined;
   if (!todo) return res.status(404).json({ error: 'Todo not found' });
-  res.json(todo);
+  res.json(mapTodo(todo));
 });
 
 // POST /api/todos - create
@@ -23,13 +29,12 @@ router.post('/', (req, res) => {
   const { title, completed } = req.body;
   if (!title) return res.status(400).json({ error: 'Title is required' });
 
-  // FIXED: Convert boolean to 1 or 0 for SQLite
   const info = db.prepare(
     'INSERT INTO todos (title, completed) VALUES (?, ?)'
   ).run(title, completed ? 1 : 0);
 
   const todo = db.prepare('SELECT * FROM todos WHERE id = ?').get(info.lastInsertRowid) as Todo;
-  res.status(201).json(todo);
+  res.status(201).json(mapTodo(todo));
 });
 
 // PUT /api/todos/:id - update
@@ -40,8 +45,6 @@ router.put('/:id', (req, res) => {
 
   const { title, completed } = req.body;
   const newTitle = title ?? existing.title;
-
-  // FIXED: Convert boolean to 1 or 0, and handle undefined correctly
   const newCompleted = completed !== undefined ? (completed ? 1 : 0) : existing.completed;
 
   db.prepare(
@@ -49,7 +52,7 @@ router.put('/:id', (req, res) => {
   ).run(newTitle, newCompleted, id);
 
   const updated = db.prepare('SELECT * FROM todos WHERE id = ?').get(id) as Todo;
-  res.json(updated);
+  res.json(mapTodo(updated));
 });
 
 // DELETE /api/todos/:id - delete
